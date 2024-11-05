@@ -5,34 +5,33 @@ import {
   IsInt,
   IsNotEmpty,
   IsString,
-  Matches,
-  MinLength
-} from "class-validator";
-
-export const passwordRegEx =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[@$!%*?&])[A-Za-zd@$!%*?&]{8,20}$/;
+  MinLength,
+  Validate,
+} from 'class-validator';
+import { UniqueEmailValidator } from '../validators/email.validator';
 
 export class CreateUserDto {
   @IsString()
   @MinLength(2, { message: 'Name must have atleast 2 characters.' })
   @IsNotEmpty()
-  name: string;
+  username: string;
 
   @IsNotEmpty()
-  @IsEmail({ }, { message: 'Please provide valid Email.' })
+  @IsEmail({}, { message: 'Please provide valid Email.' })
+  @Validate(UniqueEmailValidator)
   email: string;
 
   @IsInt()
   age: number;
 
   @IsString()
+  job_title: string;
+
+  @IsString()
   @IsEnum(['female', 'male', 'unknown'])
   gender: string;
 
   @IsNotEmpty()
-  @Matches(passwordRegEx, {
-    message: `Password must contain Minimum 8 and maximum 20 characters, at least one uppercase letter, one lowercase letter, one number and one special character`,
-  })
   password: string;
 
   @IsArray()

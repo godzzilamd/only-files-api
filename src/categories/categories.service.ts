@@ -26,4 +26,24 @@ export class CategoriesService {
   async remove(id: number): Promise<void> {
     await this.categoriesRepository.delete(id);
   }
+
+  async getUniqueCategories(page: number, perPage: number) {
+    // Calculate offset for pagination
+    const skip = (page - 1) * perPage;
+
+    // Fetch unique categories with pagination
+    const [categories, total] = await this.categoriesRepository
+      .createQueryBuilder('category')
+      .distinct(true) // Select unique categories
+      .skip(skip)
+      .take(perPage)
+      .getManyAndCount(); // Returns both data and total count for pagination
+
+    return {
+      data: categories,
+      total,
+      page,
+      lastPage: Math.ceil(total / perPage),
+    };
+  }
 }

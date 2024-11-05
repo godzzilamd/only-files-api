@@ -1,10 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Query } from "@nestjs/common";
 import { CategoriesService } from "./categories.service";
 import { Category } from "./category.entity";
 
-@Controller('categories')
+@Controller('api/categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
+
+  @Get('public')
+  async getUniqueCategories(
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('perPage', ParseIntPipe) perPage = 10,
+  ) {
+    return this.categoriesService.getUniqueCategories(page, perPage);
+  }
 
   @Get()
   findAll(): Promise<Category[]> {
