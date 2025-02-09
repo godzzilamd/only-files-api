@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Install dependencies
-RUN node --max-old-space-size=256 `which yarn` install
+RUN yarn install --network-timeout 1000000 --mutex network --jobs 1
 
 # Copy the rest of the application
 COPY . .
