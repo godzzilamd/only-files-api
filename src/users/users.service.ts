@@ -96,12 +96,15 @@ export class UsersService {
       relations: ['files', 'files.categories'],
     });
 
-    // Map each user to include unique categories
     return users.map((user) => {
       const uniqueCategories = new Map<number, Category>();
+      let filesCount = 0;
 
-      // Extract categories from each file and ensure they are unique
       user.files.forEach((file) => {
+        if (file.status === 'uploaded') {
+          filesCount++;
+        }
+
         file.categories.forEach((category) => {
           uniqueCategories.set(category.id, category); // Use Map to keep only unique categories
         });
@@ -111,6 +114,7 @@ export class UsersService {
         id: user.id,
         username: user.username,
         categories: Array.from(uniqueCategories.values()),
+        filesCount,
       };
     });
   }
