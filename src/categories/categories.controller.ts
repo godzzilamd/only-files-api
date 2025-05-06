@@ -8,8 +8,8 @@ export class CategoriesController {
 
   @Get('public')
   async getUniqueCategories(
-    @Query('page', ParseIntPipe) page = 1,
-    @Query('perPage', ParseIntPipe) perPage = 10,
+    @Query('page') page = 1,
+    @Query('perPage') perPage = 10,
   ) {
     return this.categoriesService.getUniqueCategories(page, perPage);
   }
