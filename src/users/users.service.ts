@@ -32,8 +32,9 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    const user = this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { id },
+      select: ['id', 'email', 'username', 'job_title', 'age', 'gender'],
     });
 
     if (!user) {
@@ -43,15 +44,8 @@ export class UsersService {
     return user;
   }
 
-  async findById(userId: number) {
-    if (isNaN(userId)) {
-      throw new Error('Invalid user ID');
-    }
-    return this.userRepository.findOne({ where: { id: userId } });
-  }
-
   async findByEmail(email: string) {
-    return this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: { email },
     });
   }

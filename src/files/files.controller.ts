@@ -2,7 +2,7 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { File } from './file.entity';
 
-@Controller('files')
+@Controller('api/files')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
