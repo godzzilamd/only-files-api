@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { S3Module } from './s3/s3.module';
+import { FilesModule } from "./files/files.module";
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { S3Module } from './s3/s3.module';
     CategoriesModule,
     AuthModule,
     S3Module,
+    FilesModule
   ],
   controllers: [AppController],
   providers: [AppService],

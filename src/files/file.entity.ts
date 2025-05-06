@@ -1,13 +1,20 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "../users/user.entity";
-import { Category } from "../categories/category.entity";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+  ManyToOne,
+} from 'typeorm';
+import { Category } from '../categories/category.entity';
+import { User } from '../users/user.entity';
 
-@Entity('file')
+@Entity('files')
 export class File {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column()
   name: string;
 
   @Column({ type: 'varchar', length: 100 })
@@ -23,10 +30,10 @@ export class File {
   })
   status: string;
 
-  @ManyToOne(() => User, (user) => user.files, { onDelete: 'CASCADE' })
-  user: User;
-
   @ManyToMany(() => Category, (category) => category.users)
   @JoinTable()
   categories: Category[];
+
+  @ManyToOne(() => User, (user) => user.files)
+  user: User;
 }

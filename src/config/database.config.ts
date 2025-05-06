@@ -8,7 +8,7 @@ export default registerAs(
     type: 'cockroachdb',
     url:
       process.env.DATABASE_URL ||
-      'postgresql://only_files_db_user:2dV5XXoV1Ky5ZEXmVPLOgz3MsN2QoQO9@dpg-csti678gph6c739efme0-a.frankfurt-postgres.render.com/only_files_db',
+      'postgresql://mishanea:firstpass@localhost/mydatabase',
     autoLoadEntities: true,
     logging:
       process.env.NODE_ENV === 'development' ||

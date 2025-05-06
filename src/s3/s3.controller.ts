@@ -4,7 +4,6 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Patch,
   Post,
   Request,
   UseGuards,
@@ -13,10 +12,14 @@ import { S3Service } from './s3.service';
 import { CreatePresignedUrlDto } from './dto/s3.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateFileCategoriesDto } from './dto/update-file-categories.dto';
+import { FilesService } from '../files/files.service';
 
 @Controller('api/s3')
 export class S3Controller {
-  constructor(private readonly s3Service: S3Service) {}
+  constructor(
+    private readonly s3Service: S3Service,
+    private readonly filesService: FilesService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('generate-presigned-urls')
@@ -29,7 +32,7 @@ export class S3Controller {
 
   @Get(':id/status-update')
   async updateFileStatus(@Param('id') id: string) {
-    return await this.s3Service.updateFileStatus(+id);
+    return await this.filesService.updateFileStatus(+id);
   }
 
   @Post(':id/update-categories')
@@ -37,6 +40,6 @@ export class S3Controller {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateFileCategoriesDto: UpdateFileCategoriesDto,
   ) {
-    return this.s3Service.updateFileCategories(id, updateFileCategoriesDto);
+    return this.filesService.updateFileCategories(id, updateFileCategoriesDto);
   }
 }

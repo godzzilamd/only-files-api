@@ -5,7 +5,7 @@ import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
-import { File } from '../s3/s3.entity';
+import { File } from '../files/file.entity';
 import { Category } from '../categories/category.entity';
 
 @Injectable()
@@ -28,13 +28,12 @@ export class UsersService {
   }
 
   async findAll() {
-    return this.userRepository.find({ relations: ['categories'] });
+    return this.userRepository.find();
   }
 
   async findOne(id: number) {
     const user = this.userRepository.findOne({
       where: { id },
-      relations: ['categories'],
     });
 
     if (!user) {

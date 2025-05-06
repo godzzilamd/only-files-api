@@ -1,6 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
-import { Category } from "../categories/category.entity";
-import { File } from '../s3/s3.entity'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { File } from '../files/file.entity';
 
 @Entity('users')
 export class User {
