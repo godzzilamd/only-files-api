@@ -86,8 +86,12 @@ export class FilesService {
     name?: string;
     categoryIds?: number[];
     userId?: number;
-  }): Promise<File[]> {
-    const { name, categoryIds, userId } = params;
+    page: number;
+    perPage: number;
+  }) {
+    const { name, categoryIds, userId, page = 1, perPage = 15 } = params;
+
+    const skip = (page - 1) * perPage;
 
     const query = this.fileRepository
       .createQueryBuilder('file')
@@ -108,8 +112,31 @@ export class FilesService {
 
     query.distinct(true);
 
-    const files = await query.getMany();
+    const [files, total] = await query.skip(skip).take(perPage).getManyAndCount();
 
-    return files;
+    return {
+      data: files,
+      total,
+      page,
+      lastPage: Math.ceil(total / perPage),
+    };
   }
 }
+
+// async getUniqueCategories(page: number, perPage: number) {
+//   const skip = (page - 1) * perPage;
+//
+//   const [categories, total] = await this.categoriesRepository
+//     .createQueryBuilder('category')
+//     .distinct(true)
+//     .skip(skip)
+//     .take(perPage)
+//     .getManyAndCount();
+//
+//   return {
+//     data: categories,
+//     total,
+//     page,
+//     lastPage: Math.ceil(total / perPage),
+//   };
+// }

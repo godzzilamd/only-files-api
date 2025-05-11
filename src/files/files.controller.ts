@@ -1,6 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { FilesService } from './files.service';
-import { File } from './file.entity';
 
 @Controller('api/files')
 export class FilesController {
@@ -11,7 +10,9 @@ export class FilesController {
     @Query('name') name?: string,
     @Query('categoryIds') categoryIds?: string,
     @Query('userId') userId?: string,
-  ): Promise<File[]> {
+    @Query('page') page?: number,
+    @Query('perPage') perPage?: number,
+  ) {
     const categoryIdsArray = categoryIds
       ? categoryIds
           .split(',')
@@ -23,6 +24,8 @@ export class FilesController {
       name,
       categoryIds: categoryIdsArray,
       userId: userId ? parseInt(userId, 10) : undefined,
+      page,
+      perPage,
     });
   }
 }

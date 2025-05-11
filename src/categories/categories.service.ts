@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Category } from "./category.entity";
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Category } from './category.entity';
 
 @Injectable()
 export class CategoriesService {
@@ -28,16 +28,14 @@ export class CategoriesService {
   }
 
   async getUniqueCategories(page: number, perPage: number) {
-    // Calculate offset for pagination
     const skip = (page - 1) * perPage;
 
-    // Fetch unique categories with pagination
     const [categories, total] = await this.categoriesRepository
       .createQueryBuilder('category')
-      .distinct(true) // Select unique categories
+      .distinct(true)
       .skip(skip)
       .take(perPage)
-      .getManyAndCount(); // Returns both data and total count for pagination
+      .getManyAndCount();
 
     return {
       data: categories,
