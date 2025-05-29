@@ -9,6 +9,9 @@ export class User {
   @Column({ type: 'varchar', length: 100 })
   username: string;
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  full_name: string;
+
   @Column({ type: 'varchar', length: 100, unique: true })
   email: string;
 
@@ -26,6 +29,15 @@ export class User {
 
   @Column({ type: 'enum', enum: ['admin', 'regular'], default: 'regular' })
   role: 'admin' | 'regular';
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    default:
+      'https://upload.wikimedia.org/wikipedia/commons/6/66/Google_Docs_2020_Logo.svg',
+    nullable: true,
+  })
+  cover_photo: string;
 
   @OneToMany(() => File, (file) => file.user)
   files: File[];

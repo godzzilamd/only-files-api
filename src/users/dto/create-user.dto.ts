@@ -16,6 +16,13 @@ export class CreateUserDto {
   @IsNotEmpty()
   username: string;
 
+  @IsString()
+  @MinLength(2, { message: 'Name must have atleast 2 characters.' })
+  full_name: string;
+
+  @IsString()
+  cover_photo: string;
+
   @IsNotEmpty()
   @IsEmail({}, { message: 'Please provide valid Email.' })
   @Validate(UniqueEmailValidator)

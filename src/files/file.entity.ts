@@ -30,6 +30,9 @@ export class File {
   })
   status: string;
 
+  @Column({ type: 'float', default: 0 })
+  price: number;
+
   @ManyToMany(() => Category, (category) => category.users)
   @JoinTable()
   categories: Category[];

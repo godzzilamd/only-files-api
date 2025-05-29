@@ -1,4 +1,11 @@
-import { IsEnum, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateFileDto {
   @IsString()
@@ -18,4 +25,8 @@ export class CreateFileDto {
 
   @IsInt()
   userId: number;
+
+  @IsOptional()
+  @IsNumber()
+  price?: number;
 }
