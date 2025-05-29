@@ -54,10 +54,12 @@ export class UsersService {
     const user = await this.userRepository.findOneBy({ id });
 
     if (updateUserDto.username) user.username = updateUserDto.username;
+    if (updateUserDto.full_name) user.full_name = updateUserDto.full_name;
     if (updateUserDto.age) user.age = updateUserDto.age;
     if (updateUserDto.email) user.email = updateUserDto.email;
     if (updateUserDto.password) user.password = updateUserDto.password;
     if (updateUserDto.gender) user.gender = updateUserDto.gender;
+    if (updateUserDto.cover_photo) user.cover_photo = updateUserDto.cover_photo;
 
     return this.userRepository.save(user);
   }
@@ -106,6 +108,8 @@ export class UsersService {
       return {
         id: user.id,
         username: user.username,
+        fullName: user.full_name,
+        coverPhoto: user.cover_photo,
         categories: Array.from(uniqueCategories.values()),
         filesCount,
       };
