@@ -3,10 +3,11 @@ import {
   Post,
   Body,
   UsePipes,
-  HttpException,
-} from '@nestjs/common';
+  HttpException, Get, UseGuards, Req
+} from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { CustomValidationPipe } from '../helpers/validation';
+import { GoogleAuthGuard } from './google-auth.guard';
 
 @Controller('api')
 export class AuthController {
@@ -31,5 +32,18 @@ export class AuthController {
   @UsePipes(new CustomValidationPipe())
   async signUp(@Body() body: any) {
     return this.authService.signUp(body);
+  }
+
+  @Get('auth/google')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth(@Req() req) {
+    // Initiates the Google OAuth2 login flow
+  }
+
+  @Get('auth/google/callback')
+  @UseGuards(GoogleAuthGuard)
+  googleAuthRedirect(@Req() req) {
+    // Handles the Google OAuth2 callback and returns user info or tokens
+    return req.user;
   }
 }
