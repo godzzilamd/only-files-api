@@ -39,6 +39,9 @@ export class User {
   })
   cover_photo: string;
 
+  @Column({ type: 'varchar', length: 30, default: 'platform' })
+  provider: string;
+
   @OneToMany(() => File, (file) => file.user)
   files: File[];
 }

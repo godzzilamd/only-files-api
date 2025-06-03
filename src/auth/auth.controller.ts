@@ -3,15 +3,18 @@ import {
   Post,
   Body,
   UsePipes,
-  HttpException, Get, UseGuards, Req
-} from "@nestjs/common";
+  HttpException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CustomValidationPipe } from '../helpers/validation';
-import { GoogleAuthGuard } from './google-auth.guard';
+import { UsersService } from '../users/users.service';
 
 @Controller('api')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('login')
   @UsePipes(new CustomValidationPipe())
@@ -34,16 +37,14 @@ export class AuthController {
     return this.authService.signUp(body);
   }
 
-  @Get('auth/google')
-  @UseGuards(GoogleAuthGuard)
-  async googleAuth(@Req() req) {
-    // Initiates the Google OAuth2 login flow
-  }
+  @Post('google-login')
+  async googleLogin(@Body('accessToken') token: string) {
+    const userData = await this.authService.verifyGoogleToken(token);
 
-  @Get('auth/google/callback')
-  @UseGuards(GoogleAuthGuard)
-  googleAuthRedirect(@Req() req) {
-    // Handles the Google OAuth2 callback and returns user info or tokens
-    return req.user;
+    console.log(userData, 'userData');
+
+    const createdUserData = this.usersService.importUser(userData);
+
+    return this.authService.login(createdUserData);
   }
 }

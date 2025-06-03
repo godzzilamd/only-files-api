@@ -43,4 +43,8 @@ export class CreateUserDto {
 
   @IsArray()
   categories: number[];
+
+  @IsString()
+  @IsEnum(['platform', 'google'])
+  provider: string;
 }
