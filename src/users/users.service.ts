@@ -27,6 +27,16 @@ export class UsersService {
     return this.userRepository.save(user);
   }
 
+  async importUser(updateUserDto: UpdateUserDto): Promise<User> {
+    const user: User = new User();
+
+    user.username = updateUserDto.username;
+    user.email = updateUserDto.email;
+    user.password = await bcrypt.hash('imported', 5);
+
+    return this.userRepository.save(user);
+  }
+
   async findAll() {
     return this.userRepository.find();
   }
