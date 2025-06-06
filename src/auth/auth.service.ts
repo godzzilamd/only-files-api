@@ -5,8 +5,7 @@ import { UsersService } from '../users/users.service';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
-import axios from 'axios';
-import { UpdateUserDto } from '../users/dto/update-user.dto';
+import axios, { AxiosResponse } from 'axios';
 
 @Injectable()
 export class AuthService {
@@ -28,10 +27,12 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id, role: user.role };
-
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign({
+        email: user.email,
+        sub: user.id,
+        role: user.role,
+      }),
       role: user.role,
     };
   }
@@ -51,9 +52,14 @@ export class AuthService {
 
   async verifyGoogleToken(token: string) {
     try {
-      return (await axios.get(
-        `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${token}`,
-      )) as UpdateUserDto;
+      return await axios.get<any, AxiosResponse<any>>(
+        'https://www.googleapis.com/oauth2/v1/userinfo?alt=json',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
     } catch (err) {
       throw new HttpException(
         {

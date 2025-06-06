@@ -33,6 +33,7 @@ export class UsersService {
     user.username = updateUserDto.username;
     user.email = updateUserDto.email;
     user.password = await bcrypt.hash('imported', 5);
+    user.provider = 'google';
 
     return this.userRepository.save(user);
   }

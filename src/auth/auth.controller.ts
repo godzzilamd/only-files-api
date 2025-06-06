@@ -8,8 +8,9 @@ import {
 import { AuthService } from './auth.service';
 import { CustomValidationPipe } from '../helpers/validation';
 import { UsersService } from '../users/users.service';
+import { UpdateUserDto } from '../users/dto/update-user.dto';
 
-@Controller('api')
+@Controller('api/auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -37,13 +38,22 @@ export class AuthController {
     return this.authService.signUp(body);
   }
 
-  @Post('google-login')
+  @Post('google')
   async googleLogin(@Body('accessToken') token: string) {
-    const userData = await this.authService.verifyGoogleToken(token);
+    const { data } = await this.authService.verifyGoogleToken(token);
 
-    console.log(userData, 'userData');
+    const foundedUser = await this.usersService.findByEmail(data.email);
 
-    const createdUserData = this.usersService.importUser(userData);
+    if (foundedUser) {
+      return this.authService.login(foundedUser);
+    }
+
+    const createdUserData = this.usersService.importUser({
+      username: data.name,
+      email: data.email,
+      cover_photo: data.picture,
+      verified_email: true,
+    } as UpdateUserDto);
 
     return this.authService.login(createdUserData);
   }
